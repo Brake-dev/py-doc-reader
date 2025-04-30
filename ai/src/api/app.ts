@@ -26,9 +26,13 @@ app.use((req, res, next) => {
 });
 
 app.get("/test", async (_req, res) => {
-  res.status(200).send();
+  try {
+    return res.send(200);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
 });
 
-app.listen(8080, () => {
-  console.log("Listening at port 8080");
+app.listen(8081, () => {
+  console.log("Listening at port 8081");
 });

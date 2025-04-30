@@ -1,7 +1,11 @@
 import express from "express";
 import path from "path";
+import { fileURLToPath } from "url";
 
-import { dir } from "./utils.js";
+const { dirname } = path;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export const dir = path.join(__dirname, "../../public");
 
 const app = express();
 app.use(express.json());
@@ -28,15 +32,6 @@ app.get("/test", async (_, res): Promise<any> => {
   }
 });
 
-app.get("/test/:name", async (req, res): Promise<any> => {
-  const name = req.params.name;
-  try {
-    return res.sendFile(path.join(dir, `${name}.json`));
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-});
-
-app.listen(8081, () => {
-  console.log("Server listening at port 8081");
+app.listen(8080, () => {
+  console.log("Server listening at port 8080");
 });
