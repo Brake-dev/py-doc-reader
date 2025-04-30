@@ -1,0 +1,9 @@
+output.txt
+node_modules
+dist
+public/
+.mastra
+.env.development
+.env
+*.db
+*.db-*
