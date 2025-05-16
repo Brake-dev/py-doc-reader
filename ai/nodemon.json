@@ -1,6 +1,0 @@
-{
-  "watch": ["src"],
-  "ext": ".js,.ts",
-  "ignore": ["db/*", "public/*", "dump/*"],
-  "exec": "tsc && node dist/api/app.js"
-}
