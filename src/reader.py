@@ -14,7 +14,7 @@ def read_file(query_text: str) -> str:
 
     Settings.embed_model = embed
 
-    documents = SimpleDirectoryReader("./docs").load_data()
+    documents = SimpleDirectoryReader("./temp").load_data()
     index = VectorStoreIndex.from_documents(
         documents,
     )

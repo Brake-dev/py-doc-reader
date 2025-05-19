@@ -19,7 +19,7 @@ class Server(BaseHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.end_headers()
             self.wfile.write(bytes(res, "utf-8"))
-        if self.path == "/readPDF":
+        elif self.path == "/readPDF":
             content_length = int(self.headers["Content-Length"])
             body = self.rfile.read(content_length)
 
