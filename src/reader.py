@@ -3,6 +3,8 @@ from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from transformers.models.auto.tokenization_auto import AutoTokenizer
 
+PATH = "./docs/md/"
+
 
 def read_file(query_text: str) -> str:
     llm = Ollama(model="gemma3", request_timeout=60.0)
@@ -14,7 +16,7 @@ def read_file(query_text: str) -> str:
 
     Settings.embed_model = embed
 
-    documents = SimpleDirectoryReader("./temp").load_data()
+    documents = SimpleDirectoryReader(PATH).load_data()
     index = VectorStoreIndex.from_documents(
         documents,
     )

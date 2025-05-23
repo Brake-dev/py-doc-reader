@@ -1,0 +1,8 @@
+llama-index-core==0.12.34.post1
+llama-index-embeddings-ollama==0.6.0
+llama-index-llms-ollama==0.5.4
+llama-index-readers-file==0.4.7
+ollama==0.4.8
+pymupdf4llm==0.0.24
+torch==2.6.0
+transformers==4.51.3

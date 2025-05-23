@@ -6,7 +6,7 @@ from llama_index.embeddings.ollama import OllamaEmbedding
 from transformers.models.auto.tokenization_auto import AutoTokenizer
 import pymupdf4llm
 
-PATH = "./docs/"
+PATH = "./docs/pdf/"
 
 
 def read_pdf_file(query_text: str) -> str:
