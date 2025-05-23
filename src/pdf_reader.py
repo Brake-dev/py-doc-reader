@@ -1,9 +1,10 @@
 import os
 
-from llmsherpa.readers import LayoutPDFReader
-from llama_index.core import VectorStoreIndex, Document
+from llama_index.core import Settings, VectorStoreIndex
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
+from transformers.models.auto.tokenization_auto import AutoTokenizer
+import pymupdf4llm
 
 PATH = "./docs/"
 
@@ -12,25 +13,25 @@ def read_pdf_file(query_text: str) -> str:
     llm = Ollama(model="gemma3", request_timeout=60.0)
     embed = OllamaEmbedding(model_name="mxbai-embed-large")
 
-    llmsherpa_api_url = "http://localhost:5010/api/parseDocument?renderFormat=all"
-    pdf_reader = LayoutPDFReader(llmsherpa_api_url)
     index = VectorStoreIndex([], embed_model=embed)
 
+    Settings.llm = llm
+    Settings.tokenizer = AutoTokenizer.from_pretrained("./models/gemma-3-4b-it")
+    Settings.embed_model = embed
+
+    llama_reader = pymupdf4llm.LlamaMarkdownReader()
+
     obj = os.scandir(PATH)
-    files = []
 
     for entry in obj:
         if entry.is_file() and "pdf" in entry.name:
-            files.append(entry.name)
+            pdf_path = f"{PATH}{entry.name}"
+            doc = llama_reader.load_data(pdf_path)
 
-    for f in files:
-        pdf_url = f"{PATH}{f}"
-        doc = pdf_reader.read_pdf(pdf_url)
+            for d in doc:
+                index.insert(d)
 
-        for chunk in doc.chunks():
-            index.insert(Document(text=chunk.to_context_text(), extra_info={}))
-
-    query_engine = index.as_query_engine(llm)
-
+    query_engine = index.as_query_engine()
     res = query_engine.query(query_text)
+
     return str(res)
