@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 from llama_index.core import Settings, VectorStoreIndex
 from llama_index.llms.ollama import Ollama
@@ -35,3 +36,8 @@ def read_pdf_file(query_text: str) -> str:
     res = query_engine.query(query_text)
 
     return str(res)
+
+
+def write_to_md():
+    md_text = pymupdf4llm.to_markdown("./docs/pdf/1910.13461v1.pdf")
+    pathlib.Path("output.md").write_bytes(md_text.encode())
