@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from reader import read_file
 from pdf_reader import read_pdf_file
+from structured_output import get_structured_output_from_doc
 
 HOST_NAME = "localhost"
 SERVER_PORT = 8081
@@ -24,6 +25,13 @@ class Server(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
 
             res = read_pdf_file(body.decode("utf-8"))
+
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            self.wfile.write(bytes(res, "utf-8"))
+        elif self.path == "/struct":
+            res = get_structured_output_from_doc()
 
             self.send_response(200)
             self.send_header("Content-type", "text/html")
