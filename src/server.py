@@ -3,6 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from reader import read_file
 from pdf_reader import read_pdf_file
 from structured_output import get_structured_output_from_doc
+from docx_output import to_docx
 
 HOST_NAME = "localhost"
 SERVER_PORT = 8081
@@ -32,11 +33,11 @@ class Server(BaseHTTPRequestHandler):
             self.wfile.write(bytes(res, "utf-8"))
         elif self.path == "/struct":
             res = get_structured_output_from_doc()
+            to_docx(res)
 
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            self.wfile.write(bytes(res, "utf-8"))
         else:
             self.send_response(404)
             self.send_header("Content-type", "text/html")

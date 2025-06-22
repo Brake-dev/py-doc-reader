@@ -4,6 +4,7 @@ from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from transformers.models.auto.tokenization_auto import AutoTokenizer
 from pydantic import BaseModel
+from pydantic_core import from_json
 
 PATH = "./docs/md/"
 
@@ -22,7 +23,7 @@ class DocListSchema(BaseModel):
     topics: List[DocSchema]
 
 
-def get_structured_output_from_doc() -> str:
+def get_structured_output_from_doc() -> DocListSchema:
     llm = Ollama(model="gemma3", request_timeout=60.0)
     sllm = llm.as_structured_llm(output_cls=DocListSchema)
 
@@ -42,4 +43,6 @@ def get_structured_output_from_doc() -> str:
     query_engine = index.as_query_engine()
     res = query_engine.query(QUERY_TEXT)
 
-    return str(res)
+    doc_list = DocListSchema.model_validate(from_json(str(res)))
+
+    return doc_list
